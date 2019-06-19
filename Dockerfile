@@ -14,7 +14,7 @@ LABEL source.repo="https://github.com/tum-gis/3dcitydb-importer-exporter-docker"
 
 # Setup PostGIS and 3DCityDB ##################################################
 ARG impexp_version='master'
-ENV IMPEXPVERSION=${impexp_version}
+ENV IMPEXP_VERSION=${impexp_version}
 
 ARG BUILD_PACKAGES='git'
 
@@ -26,7 +26,7 @@ RUN set -x && \
 # Clone 3DCityDB
 RUN set -x && \
   mkdir -p build_tmp && \
-  git clone -b "${IMPEXPVERSION}" --depth 1 https://github.com/3dcitydb/importer-exporter.git build_tmp
+  git clone -b "${IMPEXP_VERSION}" --depth 1 https://github.com/3dcitydb/importer-exporter.git build_tmp
 
 # Build ImpExp
 RUN set -x && \
@@ -34,8 +34,11 @@ RUN set -x && \
   chmod u+x ./gradlew && \
   ./gradlew installDist && \
   mv impexp-client/build/install/3DCityDB-Importer-Exporter/ ../impexp && \  
-  cd .. && \
-  mkdir /impexp/config
+  cd /impexp/bin
+
+# create share folder structure
+# RUN set -x && \
+#  mkdir -p /share/config /share/data
 
 # Cleanup
 RUN set -x && \
@@ -43,4 +46,11 @@ RUN set -x && \
   apt-get purge -y --auto-remove $BUILD_PACKAGES && \
   rm -rf /var/lib/apt/lists/*
 
-ENTRYPOINT [ "/impexp/bin/3DCityDB-Importer-Exporter",  "-shell", "-config", "/share/config/config.xml" ]
+# Copy entrypoint script
+COPY impexp.sh /impexp/bin
+
+RUN set -x && \
+  chmod -v u+x /impexp/bin/*
+
+WORKDIR /impexp
+ENTRYPOINT [ "./bin/impexp.sh"]
