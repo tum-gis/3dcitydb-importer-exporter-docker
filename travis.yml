@@ -1,0 +1,24 @@
+language: bash
+sudo: required
+
+services:
+  - docker
+
+env:
+  - version: v4.0.0
+  - version: v4.1.0
+  - version: v4.2.0  
+  - version: v4.2.1
+  - version: master
+
+before_install: 
+  - docker build --build-arg impexp_version=${version} -t tumgis/3dcitydb-impexp:${version} .
+  
+before_script:
+  
+script:
+  
+notifications:
+    slack: tum-gis:Z32lHXJDXaycOn4643NHSXaT
+    on_success: change
+    on_failure: always
