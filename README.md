@@ -1,19 +1,20 @@
 # 3DCityDB Importer/Exporter Docker
 
-This repo contains a Dockerfile for the [3D City Database (3DCityDB) Importer/Exporter](https://github.com/3dcitydb/importer-exporter). The images can be used to run the Importer/Exporter CLI and use the in automation processes. To get the 3DCityDB Impoter/Exporter images visit the [tumgis/3dcitydb-impexp](https://hub.docker.com/r/tumgis/3dcitydb-impexp/) DockerHub page. Currently, only the Impoter/Exporter versions >= `4.0.0` are supported.
+**Warning: This is a pre-release. The image has not jet been tested and this documentation is incomplete and possibly worng!**
+
+A test image is available here: [tumgis/3dcitydb-importer-exporter](tumgis/3dcitydb-importer-exporter) on DockerCloud.
+
+This repo contains a Dockerfile for the [3D City Database (3DCityDB) Importer/Exporter](https://github.com/3dcitydb/importer-exporter). The images can be used to run the Importer/Exporter CLI and use the in automation processes. To get the 3DCityDB Importer/Exporter images visit the [tumgis/3dcitydb-impexp](https://hub.docker.com/r/tumgis/3dcitydb-impexp/) DockerHub page. Currently, only the Importer/Exporter versions >= `4.0.0` are supported.
 
 To get started immediately go to the [usage section](#usage) section.
 
 > **Note:** The content in this repo is in development stage.
 > If you experience any problems or have a suggestion/improvement please let me know by creating an [issue](https://github.com/tum-gis/3dcitydb-importer-exporter-docker/issues) or make a contribution with a [pull request](https://github.com/tum-gis/3dcitydb-docker-postgis/pulls).
 
-
-
 ## News
 
-* Current build status: [![Build Status](https://img.shields.io/travis/tum-gis/3dcitydb-docker-postgis/master.svg?label=master)](https://travis-ci.org/tum-gis/3dcitydb-docker-postgis) [![Build Status](https://img.shields.io/travis/tum-gis/3dcitydb-docker-postgis/devel.svg?label=devel)](https://travis-ci.org/tum-gis/3dcitydb-docker-postgis#devel)
+* Current build status: **TO BE DONE**
 
-* 2019/07 - Alpine Linux image versions released!
 
 ## More 3DCityDB Docker Images
 

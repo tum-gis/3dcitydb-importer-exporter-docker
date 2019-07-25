@@ -32,17 +32,22 @@ RUN set -x && \
 RUN set -x && \
   cd build_tmp && \
   chmod u+x ./gradlew && \
-  ./gradlew installDist && \
-  mv impexp-client/build/install/3DCityDB-Importer-Exporter/ ../impexp && \  
-  cd /impexp/bin
+  ./gradlew installDist
+
+# Move dist
+RUN set -x && \
+  ls -lA . && \
+  mv /build_tmp/impexp-client/build/install/3DCityDB-Importer-Exporter/ /impexp && \
+  ls -lA /impexp
 
 # create share folder structure
-# RUN set -x && \
-#  mkdir -p /share/config /share/data
+RUN set -x && \
+  mkdir -p /share/config /share/data
 
 # Cleanup
 RUN set -x && \
   rm -rf build_tmp && \
+  ls -lA && \
   apt-get purge -y --auto-remove $BUILD_PACKAGES && \
   rm -rf /var/lib/apt/lists/*
 
@@ -50,7 +55,7 @@ RUN set -x && \
 COPY impexp.sh /impexp/bin
 
 RUN set -x && \
-  chmod -v u+x /impexp/bin/*
+  chmod -v u+x /impexp/bin/* /impexp/contribs/collada2gltf/COLLADA2GLTF*linux/COLLADA2GLTF*
 
 WORKDIR /impexp
 ENTRYPOINT [ "./bin/impexp.sh"]
