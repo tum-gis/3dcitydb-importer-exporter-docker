@@ -1,6 +1,6 @@
 # 3DCityDB Importer/Exporter Docker
 
-**Warning: This is a pre-release. The image has not jet been tested and this documentation is incomplete and possibly worng!**
+**Warning: This is a pre-release. The image has not jet been tested and this documentation is incomplete and possibly wrong!**
 
 A test image is available here: [tumgis/3dcitydb-importer-exporter](tumgis/3dcitydb-importer-exporter) on DockerCloud.
 
