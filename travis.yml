@@ -1,5 +1,6 @@
-language: bash
-sudo: required
+os: linux
+dist: bionic
+language: shell
 
 services:
   - docker
@@ -19,6 +20,6 @@ before_script:
 script:
   
 notifications:
-    slack: tum-gis:Z32lHXJDXaycOn4643NHSXaT
+    slack: "${SLACK}"
     on_success: change
     on_failure: always
