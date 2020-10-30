@@ -16,21 +16,23 @@ cat <<EOF
 # Maintainer -------------------------------------------------------------------
 #   Bruno Willenborg
 #   Chair of Geoinformatics
-#   Department of Civil, Geo and Environmental Engineering
+#   Department of Aerospace and Geodesy
 #   Technical University of Munich (TUM)
 #   b.willenborg(at)tum.de
-#
+#   www.gis.lrg.tum.de
 ################################################################################
 
 EOF
 
 # Print version info
-./bin/3DCityDB-Importer-Exporter -shell -version
- 
-# Print cmd line passed to container
-printf "Following command line parameters are passed to the 3DCityDB ImporterExporter:\n"
-printf "\n\t"
-echo "-shell $@"
-echo
+# printf "3DCityDB ImporterExporter version: "
+# ./bin/impexp -V
 
-./bin/3DCityDB-Importer-Exporter -shell "$@"
+# Print cmd line passed to container
+printf "\nCommand line passed to 3DCityDB ImporterExporter:\n"
+printf "\t"
+echo "$@"
+printf "\n\n"
+
+# ./bin/3DCityDB-Importer-Exporter -shell "$@"
+./bin/impexp "$@"

@@ -52,10 +52,11 @@ RUN set -x && \
   rm -rf /var/lib/apt/lists/*
 
 # Copy entrypoint script
-COPY impexp.sh /impexp/bin
+COPY impexp.sh /impexp/bin/
+COPY impexp-opts.txt /share/config/
 
 RUN set -x && \
   chmod -v u+x /impexp/bin/* /impexp/contribs/collada2gltf/COLLADA2GLTF*linux/COLLADA2GLTF*
 
 WORKDIR /impexp
-ENTRYPOINT [ "./bin/impexp.sh"]
+ENTRYPOINT [ "./bin/impexp.sh" ]
