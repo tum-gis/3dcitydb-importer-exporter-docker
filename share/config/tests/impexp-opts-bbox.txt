@@ -1,0 +1,7 @@
+export
+-H ssd
+-d nyc_bldg
+-u postgres
+-o /share/data/out.gml
+-b '-73.9347965,40.6180164,-73.9335465,40.6189041,4326'
+--bbox-mode=within

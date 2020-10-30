@@ -1,0 +1,6 @@
+export
+-H workcip
+-u postgres
+-d ldbv14
+-s 'Select id from cityobject limit 2'
+-o out.gml
