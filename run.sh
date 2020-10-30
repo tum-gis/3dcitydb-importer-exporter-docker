@@ -36,6 +36,15 @@
 
 docker run --name impexp -it \
    --rm \
-   -v /d/repo/git/docker/3dcitydb-impexp/git/out/:/share/data/ \
+   -e "JAVA_OPTS=-XX:+PrintFlagsFinal -Xmx1024m -XX:ActiveProcessorCount=4" \
+   -v /d/repo/git/docker/3dcitydb-impexp/git/share/:/share/ \
  tumgis/3dcitydb-importer-exporter:cli-rework \
   "$@"
+
+
+# docker run --name impexp -it \
+#    --rm \
+#    -e "JAVA_OPTS=-XX:+PrintFlagsFinal -Xmx1024m -XX:ActiveProcessorCount=4" \
+#    -v /d/repo/git/docker/3dcitydb-impexp/git/share/:/share/ \
+#  tumgis/3dcitydb-importer-exporter:oracle-jvm \
+#   "$@"
