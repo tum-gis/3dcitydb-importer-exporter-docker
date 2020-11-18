@@ -3,8 +3,8 @@
 #   GitHub              https://github.com/3dcitydb/importer-exporter
 ###############################################################################
 # Base image
-ARG baseimage_tag='11-slim'
-FROM openjdk:${baseimage_tag}
+ARG buildstage_tag='11-slim'
+FROM openjdk:${buildstage_tag} AS buildstage
 
 # Labels ######################################################################
 LABEL maintainer="Bruno Willenborg"
@@ -15,24 +15,43 @@ LABEL source.repo="https://github.com/tum-gis/3dcitydb-importer-exporter-docker"
 # Setup PostGIS and 3DCityDB ##################################################
 ARG impexp_version='master'
 ENV IMPEXP_VERSION=${impexp_version}
-
 ARG BUILD_PACKAGES='git'
+WORKDIR /build_tmp
 
-# Setup build and runtime deps
+# Install build packages
 RUN set -x && \
   apt-get update && \
-  apt-get install -y --no-install-recommends $BUILD_PACKAGES && \
-  mkdir -p build_tmp && \
-  git clone -b "${IMPEXP_VERSION}" --depth 1 https://github.com/3dcitydb/importer-exporter.git build_tmp && \
-  cd build_tmp && \
-  chmod u+x ./gradlew && \
-  ./gradlew installDist && \
-  mv /build_tmp/impexp-client/build/install/3DCityDB-Importer-Exporter/ /impexp && \
-  mkdir -p /share/config /share/data && cd /impexp && \
-  rm -rf build_tmp && \
+  apt-get install -y --no-install-recommends $BUILD_PACKAGES
+
+# Fetch source
+RUN set -x && \
+  git clone -b "${IMPEXP_VERSION}" --depth 1 https://github.com/3dcitydb/importer-exporter.git /build_tmp
+
+# Build
+RUN set -x && \
+  chmod u+x ./gradlew && ./gradlew installDist
+
+# Move dist
+RUN set -x && \
+  mkdir -p /impexp && \
+  mv impexp-client/build/install/3DCityDB-Importer-Exporter/* /impexp
+
+# Cleanup
+RUN set -x && \
   apt-get purge -y --auto-remove $BUILD_PACKAGES && \
-  rm -rf /var/lib/apt/lists/* && \
-  chmod -v u+x /impexp/bin/* /impexp/contribs/collada2gltf/COLLADA2GLTF*linux/COLLADA2GLTF*
+  rm -rf /build_tmp /impexp/samples /impexp/3dcitydb /impexp/3d-web-map-client \
+    /impexp/contribs/collada2gltf/*osx* /impexp/contribs/collada2gltf/*windows* \
+    /impexp/license /impexp/templates /impexp/**/*.md /impexp/**/*.txt /impexp/**/*.bat \
+    /var/lib/apt/lists/*
+
+# Runtime stage
+ARG runtimestage_tag='11-jre-slim'
+FROM openjdk:11-jre-slim
+COPY --from=buildstage /impexp /impexp
+
+RUN set -x && \
+  mkdir -p /share/config /share/data && \
+  chmod -v u+x /impexp/bin/* /impexp/contribs/collada2gltf/COLLADA2GLTF*linux/COLLADA2GLTF-bin
 
 # Copy entrypoint script
 COPY impexp.sh /impexp/bin/
