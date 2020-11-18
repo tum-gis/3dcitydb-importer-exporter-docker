@@ -21,42 +21,22 @@ ARG BUILD_PACKAGES='git'
 # Setup build and runtime deps
 RUN set -x && \
   apt-get update && \
-  apt-get install -y --no-install-recommends $BUILD_PACKAGES
-
-# Clone 3DCityDB
-RUN set -x && \
+  apt-get install -y --no-install-recommends $BUILD_PACKAGES && \
   mkdir -p build_tmp && \
-  git clone -b "${IMPEXP_VERSION}" --depth 1 https://github.com/3dcitydb/importer-exporter.git build_tmp
-
-# Build ImpExp
-RUN set -x && \
+  git clone -b "${IMPEXP_VERSION}" --depth 1 https://github.com/3dcitydb/importer-exporter.git build_tmp && \
   cd build_tmp && \
   chmod u+x ./gradlew && \
-  ./gradlew installDist
-
-# Move dist
-RUN set -x && \
-  ls -lA . && \
+  ./gradlew installDist && \
   mv /build_tmp/impexp-client/build/install/3DCityDB-Importer-Exporter/ /impexp && \
-  ls -lA /impexp
-
-# create share folder structure
-RUN set -x && \
-  mkdir -p /share/config /share/data
-
-# Cleanup
-RUN set -x && \
+  mkdir -p /share/config /share/data && cd /impexp && \
   rm -rf build_tmp && \
-  ls -lA /impexp && \
   apt-get purge -y --auto-remove $BUILD_PACKAGES && \
-  rm -rf /var/lib/apt/lists/*
+  rm -rf /var/lib/apt/lists/* && \
+  chmod -v u+x /impexp/bin/* /impexp/contribs/collada2gltf/COLLADA2GLTF*linux/COLLADA2GLTF*
 
 # Copy entrypoint script
 COPY impexp.sh /impexp/bin/
 COPY impexp-opts.txt /share/config/
-
-RUN set -x && \
-  chmod -v u+x /impexp/bin/* /impexp/contribs/collada2gltf/COLLADA2GLTF*linux/COLLADA2GLTF*
 
 WORKDIR /impexp
 ENTRYPOINT [ "./bin/impexp.sh" ]
