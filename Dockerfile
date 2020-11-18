@@ -3,7 +3,7 @@
 #   GitHub              https://github.com/3dcitydb/importer-exporter
 ###############################################################################
 # Base image
-ARG baseimage_tag='11'
+ARG baseimage_tag='11-slim'
 FROM openjdk:${baseimage_tag}
 
 # Labels ######################################################################
@@ -47,7 +47,7 @@ RUN set -x && \
 # Cleanup
 RUN set -x && \
   rm -rf build_tmp && \
-  ls -lA && \
+  ls -lA /impexp && \
   apt-get purge -y --auto-remove $BUILD_PACKAGES && \
   rm -rf /var/lib/apt/lists/*
 
