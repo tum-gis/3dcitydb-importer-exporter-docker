@@ -13,3 +13,13 @@
 docker build -t tumgis/3dcitydb-importer-exporter:cli-rework \
       --build-arg impexp_version=cli-rework \
     .
+
+# OpenJDK - nocache
+# docker build -t tumgis/3dcitydb-importer-exporter:cli-rework \
+#       --no-cache \
+#       --build-arg impexp_version=cli-rework \
+#     .
+
+
+# Alpine ######################################################################
+#docker build -f Dockerfile.alpine -t tumgis/3dcitydb-importer-exporter:alpine .
