@@ -2,17 +2,13 @@
 #   Official website    https://www.3dcitydb.net
 #   GitHub              https://github.com/3dcitydb/importer-exporter
 ###############################################################################
+
+# Build stage #################################################################
 # Base image
 ARG buildstage_tag='11-slim'
 FROM openjdk:${buildstage_tag} AS buildstage
 
-# Labels ######################################################################
-LABEL maintainer="Bruno Willenborg"
-LABEL maintainer.email="b.willenborg(at)tum.de"
-LABEL maintainer.organization="Chair of Geoinformatics, Technical University of Munich (TUM)"
-LABEL source.repo="https://github.com/tum-gis/3dcitydb-importer-exporter-docker"
-
-# Setup PostGIS and 3DCityDB ##################################################
+# Setup PostGIS and 3DCityDB
 ARG impexp_version='master'
 ENV IMPEXP_VERSION=${impexp_version}
 ARG BUILD_PACKAGES='git'
@@ -44,10 +40,11 @@ RUN set -x && \
     /impexp/license /impexp/templates /impexp/**/*.md /impexp/**/*.txt /impexp/**/*.bat \
     /var/lib/apt/lists/*
 
-# Runtime stage
+# Runtime stage ###############################################################
 ARG runtimestage_tag='11-jre-slim'
 FROM openjdk:11-jre-slim
 COPY --from=buildstage /impexp /impexp
+WORKDIR /impexp
 
 RUN set -x && \
   mkdir -p /share/config /share/data && \
@@ -55,7 +52,11 @@ RUN set -x && \
 
 # Copy entrypoint script
 COPY impexp.sh /impexp/bin/
-COPY impexp-opts.txt /share/config/
 
-WORKDIR /impexp
 ENTRYPOINT [ "./bin/impexp.sh" ]
+
+# Labels ######################################################################
+LABEL maintainer="Bruno Willenborg"
+LABEL maintainer.email="b.willenborg(at)tum.de"
+LABEL maintainer.organization="Chair of Geoinformatics, Technical University of Munich (TUM)"
+LABEL source.repo="https://github.com/tum-gis/3dcitydb-importer-exporter-docker"
