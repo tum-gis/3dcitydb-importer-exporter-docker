@@ -3,10 +3,9 @@ export-vis
 -u postgres
 -p postgres
 -d citydb
--o /share/data/bldg.kml
 -D collada
 -G
--O '--binary=true --dracoCompression=true'
+-O '--binary=true' -O '--dracoCompression=true'
 -g auto
 -b 13.03011979499078,52.32964777702556,13.03541028448681,52.33157239718176,4326
 --lod=halod

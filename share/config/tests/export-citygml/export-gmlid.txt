@@ -4,5 +4,3 @@ export
 -p postgres
 -d citydb
 -i "GMLID_BUI46739_1739_10911"
--o /share/data/bldg.gml
---no-appearance

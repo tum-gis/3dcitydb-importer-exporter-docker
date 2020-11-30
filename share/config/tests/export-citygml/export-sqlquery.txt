@@ -4,4 +4,3 @@ export
 -p postgres
 -d citydb
 -s 'Select id from cityobject limit 2'
--o out.gml
