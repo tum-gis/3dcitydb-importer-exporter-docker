@@ -7,11 +7,11 @@ function cleanup() {
   rm -r -f -v share/data/export/*
 }
 
-# Run tests from a folder containing txt files --------------------------------
+# Run export tests from a folder containing txt files -------------------------
 # $1  tests folder (local)
 # $2  Export file ending
 
-function test() {
+function testExport() {
   find "$1" -type f -name "*.txt" | \
   xargs -L1 -I{} basename -s .txt "{}" | xargs -I{} \
     docker run --name impexp -t \
@@ -35,7 +35,7 @@ docker rm -f -v cdbrail
 docker run -d --name cdbrail --rm tumgis/3dcitydb-postgis:railwayScene_LoD3
 
 # Test CityGML Export ---------------------------------------------------------
-test share/config/tests/export-citygml gml
+testExport share/config/tests/export-citygml gml
 
 # Test KML/glTF Export --------------------------------------------------------
 # Create export folders
@@ -43,7 +43,7 @@ find share/config/tests/export-vis -type f -name "*.txt" | \
   xargs -L1 -I{} basename -s .txt "{}" | xargs -I{} \
   mkdir -v -p share/data/export/{}
 
-test share/config/tests/export-vis kml
+testExport share/config/tests/export-vis kml
 
 # Remove Railway LoD3 dataset 3DcityDB container
 docker rm -f -v cdbrail

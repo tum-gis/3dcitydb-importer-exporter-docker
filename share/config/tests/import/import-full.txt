@@ -1,0 +1,6 @@
+import
+-H cdbimp
+-u postgres
+-p postgres
+-d citydb
+--worker-threads=2

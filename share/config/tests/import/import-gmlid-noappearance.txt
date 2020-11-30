@@ -1,0 +1,8 @@
+import
+-H cdbimp
+-u postgres
+-p postgres
+-d citydb
+--worker-threads=2
+-i "GMLID_BUI46739_1739_10911"
+--no-appearance
