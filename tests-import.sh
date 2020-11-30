@@ -26,15 +26,10 @@ docker run -d --name cdbimp --rm \
   -e "SRSNAME=urn:ogc:def:crs,crs:EPSG::3068,crs:EPSG::5783" \
 tumgis/3dcitydb-postgis:alpine
 
+# Wait for 3DCityDB
 ./wait-for-psql.sh 30 localhost $port postgres postgres echo "citydb ready!"
 
-    # TIMEOUT         Timeout in seconds
-    # HOST            Host or IP under test
-    # PORT            TCP port under test
-    # USERNAME        postgres db user name
-    # PASSWORD        postgres db user password
-    # COMMAND ARGS    Execute command with args after the test finishes
-
+# Runs tests
 testImport share/config/tests/import /share/data/import/railway-scene-lod3
 
 # Remove 3DcityDb container
