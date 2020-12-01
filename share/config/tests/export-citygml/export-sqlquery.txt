@@ -1,0 +1,6 @@
+export
+-H cdbrail
+-u postgres
+-p postgres
+-d citydb
+-s 'Select id from cityobject limit 2'

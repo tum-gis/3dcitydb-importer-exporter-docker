@@ -1,1 +1,3 @@
 /out/
+/share/data/
+*jdk*.tar.gz

@@ -1,0 +1,7 @@
+export
+-H cdbrail
+-u postgres
+-p postgres
+-d citydb
+-b '13.0334866,52.3301794,13.0350208,52.3309596,4326'
+--bbox-mode=within
