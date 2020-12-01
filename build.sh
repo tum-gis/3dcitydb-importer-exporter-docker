@@ -1,25 +1,27 @@
 #!/usr/bin/env bash
 
-# docker build -t impexp:master \
-#       --build-arg impexp_version=bbox_cli \
-#     .
+# Oracle JVM - no cache
+# DOCKER_BUILDKIT=1 \
+# docker build -t tumgis/3dcitydb-importer-exporter:oracle-jvm \
+#     --build-arg impexp_version=master \
+#     --no-cache \
+#   .
 
 # Oracle JVM
+# DOCKER_BUILDKIT=1 \
 # docker build -t tumgis/3dcitydb-importer-exporter:oracle-jvm \
-#       --build-arg impexp_version=cli-rework \
-#     .
+#     --build-arg impexp_version=master \
+#   .
 
-# OpenJDK
-docker build -t tumgis/3dcitydb-importer-exporter:cli-rework \
-      --build-arg impexp_version=cli-rework \
-    .
-
-# OpenJDK - nocache
+# OpenJDK - master - no cache
+# DOCKER_BUILDKIT=1 \
 # docker build -t tumgis/3dcitydb-importer-exporter:cli-rework \
-#       --no-cache \
-#       --build-arg impexp_version=cli-rework \
-#     .
+#     --build-arg impexp_version=master \
+#     --no-cache \
+#   .
 
-
-# Alpine ######################################################################
-#docker build -f Dockerfile.alpine -t tumgis/3dcitydb-importer-exporter:alpine .
+# OpenJDK - master
+DOCKER_BUILDKIT=1 \
+docker build -t tumgis/3dcitydb-importer-exporter:cli-rework \
+    --build-arg impexp_version=master \
+  .
