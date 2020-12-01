@@ -3,12 +3,12 @@
 #   GitHub              https://github.com/3dcitydb/importer-exporter
 ###############################################################################
 
-# Build stage #################################################################
+# Fetch & build stage #########################################################
 # Base image
 ARG buildstage_tag='11-slim'
 FROM openjdk:${buildstage_tag} AS buildstage
 
-# Setup PostGIS and 3DCityDB
+# Settings
 ARG impexp_version='master'
 ENV IMPEXP_VERSION=${impexp_version}
 ARG BUILD_PACKAGES='git'
@@ -32,6 +32,13 @@ RUN set -x && \
   mkdir -p /impexp && \
   mv impexp-client/build/install/3DCityDB-Importer-Exporter/* /impexp
 
+# Create version info file
+COPY gitinfo.sh /build_tmp
+RUN set -x && \
+  chmod u+x /build_tmp/gitinfo.sh && \
+  /build_tmp/gitinfo.sh /versioninfo.txt && \
+  cat /versioninfo.txt
+
 # Cleanup
 RUN set -x && \
   apt-get purge -y --auto-remove $BUILD_PACKAGES && \
@@ -42,8 +49,9 @@ RUN set -x && \
 
 # Runtime stage ###############################################################
 ARG runtimestage_tag='11-jre-slim'
-FROM openjdk:11-jre-slim
+FROM openjdk:11-jre-slim AS runtimestage
 COPY --from=buildstage /impexp /impexp
+COPY --from=buildstage /versioninfo.txt /versioninfo.txt
 WORKDIR /impexp
 
 RUN set -x && \
