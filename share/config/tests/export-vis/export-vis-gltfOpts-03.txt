@@ -6,8 +6,9 @@ export-vis
 -D collada
 -G
 --gDC
---gltv 2.0
+--gltf-version=2.0
 --gltf-b
+--get
 -g auto
 -b 13.03011979499078,52.32964777702556,13.03541028448681,52.33157239718176,4326
 --lod=halod

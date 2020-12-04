@@ -22,6 +22,6 @@
 
 # OpenJDK - master
 DOCKER_BUILDKIT=1 \
-docker build -t tumgis/3dcitydb-importer-exporter \
-    --build-arg impexp_version=master \
+docker build -t tumgis/3dcitydb-importer-exporter:export-vis-cli \
+    --build-arg impexp_version=export-vis-cli \
   .
