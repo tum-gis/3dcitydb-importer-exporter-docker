@@ -18,7 +18,7 @@ function testExport() {
     --rm \
     -v /d/repo/git/docker/3dcitydb-impexp/git/share/:/share \
     --link cdbrail \
-   tumgis/3dcitydb-importer-exporter:cli-rework "@/$1/{}.txt" -o "/share/data/export/{}/{}.$2"
+   tumgis/3dcitydb-importer-exporter:export-vis-cli "@/$1/{}.txt" -o "/share/data/export/{}/{}.$2"
    echo "Exit code: $?"
 }
 
@@ -35,7 +35,7 @@ docker rm -f -v cdbrail
 docker run -d --name cdbrail --rm tumgis/3dcitydb-postgis:railwayScene_LoD3
 
 # Test CityGML Export ---------------------------------------------------------
-testExport share/config/tests/export-citygml gml
+# testExport share/config/tests/export-citygml gml
 
 # Test KML/glTF Export --------------------------------------------------------
 # Create export folders
