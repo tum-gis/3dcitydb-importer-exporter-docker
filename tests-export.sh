@@ -10,6 +10,8 @@ function cleanup() {
 # Run export tests from a folder containing txt files -------------------------
 # $1  tests folder (local)
 # $2  Export file ending
+# $3  docker image
+# $4  tag of docker image
 
 function testExport() {
   find "$1" -type f -name "*.txt" | \
@@ -18,7 +20,9 @@ function testExport() {
     --rm \
     -v /d/repo/git/docker/3dcitydb-impexp/git/share/:/share \
     --link cdbrail \
-   tumgis/3dcitydb-importer-exporter:export-vis-cli "@/$1/{}.txt" -o "/share/data/export/{}/{}.$2"
+   "$3:$4" \
+    "@/$1/{}.txt" \
+    -o "/share/data/export/{}/{}.$2"
    echo "Exit code: $?"
 }
 
@@ -26,10 +30,17 @@ function testExport() {
 # Script
 ###############################################################################
 
+# settings
+image=tumgis/3dcitydb-importer-exporter
+tag=export-vis-cli
+
 # Cleanup
 cleanup
 
 # Tests #######################################################################
+# Echo settings
+echo "Using image:tag= $image:$tag"
+
 # Start Railway LoD3 dataset 3DcityDB container
 docker rm -f -v cdbrail
 docker run -d --name cdbrail --rm tumgis/3dcitydb-postgis:railwayScene_LoD3
@@ -43,7 +54,7 @@ find share/config/tests/export-vis -type f -name "*.txt" | \
   xargs -L1 -I{} basename -s .txt "{}" | xargs -I{} \
   mkdir -v -p share/data/export/{}
 
-testExport share/config/tests/export-vis kml
+testExport share/config/tests/export-vis kml "$image" "$tag"
 
 # Remove Railway LoD3 dataset 3DcityDB container
 docker rm -f -v cdbrail

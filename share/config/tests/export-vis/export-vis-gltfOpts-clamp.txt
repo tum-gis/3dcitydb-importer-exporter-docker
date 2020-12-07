@@ -1,0 +1,19 @@
+export-vis
+-H cdbrail
+-u postgres
+-p postgres
+-d citydb
+-D collada
+-G
+--gDC
+--gltf-version=2.0
+--gltf-b
+--gltf-e
+-g auto
+-b 13.03011979499078,52.32964777702556,13.03541028448681,52.33157239718176,4326
+--lod=halod
+-a visual
+-j
+--worker-threads=2
+-A clamp
+-O globe
