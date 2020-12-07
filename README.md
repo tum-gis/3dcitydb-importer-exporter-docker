@@ -245,75 +245,101 @@ This section contains the output of the Importer/Exporter CLI `help` command.
 ```text
   Usage: impexp export-vis [-hjVz] [-c=<file>] [--log-file=<file>]
                          [--log-level=<level>] -o=<file> [--pid-file=<file>]
-                         [--worker-threads=<threads[,max]>] [-D=<mode>[,
-                         <mode>...] [-D=<mode>[,<mode>...]]... -l=<0..4 |
-                         halod> [-v=<mode=value>[,<mode=value>...]]...
-                         [-a=<theme>]] [[[-t=<[prefix:]name>[,<[prefix:]
-                         name>...]]... [--namespace=<prefix=name>[,
-                         <prefix=name>...]]...] [-i=<id>[,<id>...] [-i=<id>[,
-                         <id>...]]...] [-b=<minx,miny,maxx,maxy[,srid]>
-                         [-g=<rows,columns | auto>]]] [-G
-                         [--gltf-converter=<file>]
-                         [-O='<option>'[,'<option>'...]]... [-s]]
-                         [[-T=<database>] -H=<host> [-P=<port>] -d=<name>
-                         [-S=<schema>] -u=<name> [-p[=<password>]]]
-                         [@<filename>...]
-  Exports data in KML/COLLADA/glTF format for visualization.
-        [@<filename>...]       One or more argument files containing options.
-    -o, --output=<file>        Name of the master KML output file.
-    -z, --kmz                  Compress KML/COLLADA output and save as KMZ.
-    -j, --json-metadata        Write JSON metadata file.
-        --worker-threads=<threads[,max]>
-                              Number of worker threads to use.
-    -h, --help                 Show this help message and exit.
-    -V, --version              Print version information and exit.
-    -c, --config=<file>        Use configuration from this file.
-        --log-level=<level>    Log level: error, warn, info, debug (default:
-                                info).
-        --log-file=<file>      Write log messages to this file.
-        --pid-file=<file>      Create a file containing the current process ID.
-  Display options:
-    -D, --display-mode=<mode>[,<mode>...]
-                              Display mode: collada, geometry, extruded,
-                                footprint.
-    -l, --lod=<0..4 | halod>   LoD to export from.
-    -v, --visible-from=<mode=value>[,<mode=value>...]
-                              Visibility for each display mode (default: 0).
-    -a, --appearance-theme=<theme>
-                              Appearance theme to use for COLLADA/glTF exports.
-                                Use 'none' for the null theme.
-  Query and filter options:
-    -t, --type-name=<[prefix:]name>[,<[prefix:]name>...]
-                              Names of the top-level features to process.
-        --namespace=<prefix=name>[,<prefix=name>...]
-                              Prefix-to-namespace mappings.
-    -i, --gml-id=<id>[,<id>...]
-                              Process top-level features with a matching gml:id.
-    -b, --bbox=<minx,miny,maxx,maxy[,srid]>
-                              Bounding box to use as spatial filter.
-    -g, --bbox-tiling=<rows,columns | auto>
-                              Tile the bounding box into a rows x columns grid
-                                or automatically.
-  glTF export options:
-    -G, --gltf                 Convert COLLADA output to glTF.
-        --gltf-converter=<file>
-                              Path to the COLLADA2GLTF converter executable.
-    -O, --gltf-option='<option>'[,'<option>'...]
-                              CLI option to be passed to the COLLADA2GLTF
-                                converter (embrace with single quotes)
-    -s, --suppress-collada     Only keep glTF and remove the COLLADA output.
-  Database connection options:
-    -T, --db-type=<database>   Database type: postgresql, oracle (default:
-                                postgresql).
-    -H, --db-host=<host>       Name of the host on which the 3DCityDB is running.
-    -P, --db-port=<port>       Port of the 3DCityDB server (default: 5432 | 1521).
-    -d, --db-name=<name>       Name of the 3DCityDB database to connect to.
-    -S, --db-schema=<schema>   Schema to use when connecting to the 3DCityDB
-                                (default: citydb | username).
-    -u, --db-username=<name>   Username to use when connecting to the 3DCityDB.
-    -p, --db-password[=<password>]
-                              Password to use when connecting to the 3DCityDB
-                                (leave empty to be prompted).
+                         [--worker-threads=<threads[,max]>] [-D=<mode[=pixels]>
+                         [,<mode[=pixels]>...] [-D=<mode[=pixels]>[,<mode
+                         [=pixels]>...]]... -l=<0..4 | halod> [-a=<theme>]]
+                         [[[-t=<[prefix:]name>[,<[prefix:]name>...]]...
+                         [--namespace=<prefix=name>[,<prefix=name>...]]...]
+                         [-i=<id>[,<id>...] [-i=<id>[,<id>...]]...] [-b=<minx,
+                         miny,maxx,maxy[,srid]> [-g=<rows,columns | auto>]]]
+                         [[-s] [--no-surface-normals] [-C] [-x=<mode>]
+                         [--texture-atlas-pot]] [-G [--gltf-version=<version>]
+                         [--gltf-converter=<file>] [--gltf-embed-textures]
+                         [--gltf-binary] [--gltf-draco-compression] [-r]]
+                         [[-A=<mode>] [-O=<number|globe|generic>]
+                         [--google-elevation-api=<api-key>]
+                         [--transform-height]] [[-T=<database>] -H=<host>
+                         [-P=<port>] -d=<name> [-S=<schema>] -u=<name> [-p
+                         [=<password>]]] [@<filename>...]
+Exports data in KML/COLLADA/glTF format for visualization.
+      [@<filename>...]       One or more argument files containing options.
+  -o, --output=<file>        Name of the master KML output file.
+  -z, --kmz                  Compress KML/COLLADA output and save as KMZ.
+  -j, --json-metadata        Write JSON metadata file.
+      --worker-threads=<threads[,max]>
+                             Number of worker threads to use.
+  -h, --help                 Show this help message and exit.
+  -V, --version              Print version information and exit.
+  -c, --config=<file>        Use configuration from this file.
+      --log-level=<level>    Log level: error, warn, info, debug (default:
+                               info).
+      --log-file=<file>      Write log messages to this file.
+      --pid-file=<file>      Create a file containing the current process ID.
+Display options:
+  -D, --display-mode=<mode[=pixels]>[,<mode[=pixels]>...]
+                             Display mode: collada, geometry, extruded,
+                               footprint. Optionally specify the visibility in
+                               terms of screen pixels (default: 0).
+  -l, --lod=<0..4 | halod>   LoD to export from.
+  -a, --appearance-theme=<theme>
+                             Appearance theme to use for COLLADA/glTF exports.
+                               Use 'none' for the null theme.
+Query and filter options:
+  -t, --type-name=<[prefix:]name>[,<[prefix:]name>...]
+                             Names of the top-level features to process.
+      --namespace=<prefix=name>[,<prefix=name>...]
+                             Prefix-to-namespace mappings.
+  -i, --gml-id=<id>[,<id>...]
+                             Process top-level features with a matching gml:id.
+  -b, --bbox=<minx,miny,maxx,maxy[,srid]>
+                             Bounding box to use as spatial filter.
+  -g, --bbox-tiling=<rows,columns | auto>
+                             Tile the bounding box into a rows x columns grid
+                               or automatically.
+COLLADA/glTF rendering options:
+  -s, --double-sided         Force all surfaces to be double sided.
+      --no-surface-normals   Do not generate surface normals.
+  -C, --crop-textures        Crop texture images.
+  -x, --texture-atlas=<mode> Texture atlas mode: none, basic, tpim,
+                               tpim_wo_rotation (default: basic).
+      --texture-atlas-pot    Texture atlases must be power-of-two sized.
+glTF export options:
+  -G, --gltf                 Convert COLLADA output to glTF.
+      --gltf-version=<version>
+                             glTF version: 1.0, 2.0 (default: 2.0).
+      --gltf-converter=<file>
+                             Path to the COLLADA2GLTF converter executable.
+      --gltf-embed-textures  Embed textures in glTF files.
+      --gltf-binary          Output binary glTF.
+      --gltf-draco-compression
+                             Output meshes using Draco compression (requires
+                               glTF version 2.0).
+  -r, --remove-collada       Only keep glTF and remove the COLLADA output.
+Elevation options:
+  -A, --altitude-mode=<mode> Altitude mode: absolute, relative, clamp (default:
+                               absolute).
+  -O, --altitude-offset=<number|globe|generic>
+                             Apply offset to height values. Provide a <number>
+                               as constant offset, <globe> for zero elevation
+                               or <generic> to use the generic attribute
+                               GE_LoDn_zOffset as per-feature offset.
+      --google-elevation-api=<api-key>
+                             Query the Google elevation API when no
+                               GE_LoDn_zOffset attribute is available. Requires
+                               an API key.
+      --transform-height     Transform height to WGS84 ellipsoid height.
+Database connection options:
+  -T, --db-type=<database>   Database type: postgresql, oracle (default:
+                               postgresql).
+  -H, --db-host=<host>       Name of the host on which the 3DCityDB is running.
+  -P, --db-port=<port>       Port of the 3DCityDB server (default: 5432 | 1521).
+  -d, --db-name=<name>       Name of the 3DCityDB database to connect to.
+  -S, --db-schema=<schema>   Schema to use when connecting to the 3DCityDB
+                               (default: citydb | username).
+  -u, --db-username=<name>   Username to use when connecting to the 3DCityDB.
+  -p, --db-password[=<password>]
+                             Password to use when connecting to the 3DCityDB
+                               (leave empty to be prompted).
 ```
 
 ### Delete
