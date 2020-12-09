@@ -1,0 +1,19 @@
+export-vis
+-H ssd
+-u postgres
+-p postgres
+-d munichFull
+-D collada
+-G
+--gDC
+--gltf-version=2.0
+--gltf-b
+--gltf-e
+-g auto=50
+-b 11.565063,48.1473766,11.5696549,48.1505262,4326
+--lod=halod
+-a GlobalRadYear
+-j
+-t Building
+--worker-threads=2
+-f 0.5
