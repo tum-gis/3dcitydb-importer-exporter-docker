@@ -1,8 +1,12 @@
 #!/usr/bin/env bash
-
+###############################################################################
+# Functions
+###############################################################################
 # Run import tests from a folder containing txt files -------------------------
 # $1  tests folder (local)
 # $2  Import files or folders
+# $3  docker image
+# $4  tag of docker image
 
 function testImport() {
   find "$1" -type f -name "*.txt" | \
@@ -11,10 +15,18 @@ function testImport() {
     --rm \
     -v /d/repo/git/docker/3dcitydb-impexp/git/share/:/share \
     --link cdbimp \
-   tumgis/3dcitydb-importer-exporter:cli-rework "@/$1/{}.txt" "$2"
+   "$3:$4" \
+   "@/$1/{}.txt" "$2"
    echo "Exit code: $?"
 }
 
+###############################################################################
+# Script
+###############################################################################
+
+# settings
+image=tumgis/3dcitydb-importer-exporter
+tag=master
 
 # Test CityGML Import ---------------------------------------------------------
 port=$(shuf -i 2000-65000 -n 1)

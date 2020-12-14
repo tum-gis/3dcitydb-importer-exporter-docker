@@ -32,7 +32,7 @@ function testExport() {
 
 # settings
 image=tumgis/3dcitydb-importer-exporter
-tag=export-vis-cli
+tag=master
 
 # Cleanup
 cleanup
@@ -46,7 +46,7 @@ docker rm -f -v cdbrail
 docker run -d --name cdbrail --rm tumgis/3dcitydb-postgis:railwayScene_LoD3
 
 # Test CityGML Export ---------------------------------------------------------
-# testExport share/config/tests/export-citygml gml
+testExport share/config/tests/export-citygml gml
 
 # Test KML/glTF Export --------------------------------------------------------
 # Create export folders
