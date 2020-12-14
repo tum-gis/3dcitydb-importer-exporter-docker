@@ -15,13 +15,13 @@
 
 # OpenJDK - master - no cache
 DOCKER_BUILDKIT=1 \
-docker build -t tumgis/3dcitydb-importer-exporter:export-vis-cli \
+docker build -t tumgis/3dcitydb-importer-exporter:latest \
     --build-arg impexp_version=master \
     --no-cache \
   .
 
 # OpenJDK - master
 # DOCKER_BUILDKIT=1 \
-# docker build -t tumgis/3dcitydb-importer-exporter:master \
+# docker build -t tumgis/3dcitydb-importer-exporter:latest \
 #     --build-arg impexp_version=master \
 #   .
