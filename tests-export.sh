@@ -37,14 +37,6 @@ tag=latest
 # Cleanup
 cleanup
 
-# Tests #######################################################################
-# Echo settings
-echo "Using image:tag= $image:$tag"
-
-# Start Railway LoD3 dataset 3DcityDB container
-docker rm -f -v cdbrail
-docker run -d --name cdbrail --rm tumgis/3dcitydb-postgis:railwayScene_LoD3
-
 # Test CityGML Export ---------------------------------------------------------
 testExport share/config/tests/export-citygml gml "$image" "$tag"
 
@@ -52,9 +44,6 @@ testExport share/config/tests/export-citygml gml "$image" "$tag"
 # Create export folders
 find share/config/tests/export-vis -type f -name "*.txt" | \
   xargs -L1 -I{} basename -s .txt "{}" | xargs -I{} \
-  mkdir -v -p share/data/export/{}
+  mkdir -v -p "share/data/export/{}"
 
 testExport share/config/tests/export-vis kml "$image" "$tag"
-
-# Remove Railway LoD3 dataset 3DcityDB container
-docker rm -f -v cdbrail
