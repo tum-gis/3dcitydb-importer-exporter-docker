@@ -4,7 +4,7 @@
 ###############################################################################
 # Cleanup data folder ---------------------------------------------------------
 function cleanup() {
-  rm -r -f -v share/data/export/*
+  rm -r -f -v ./share/data/export/*
 }
 
 # Run export tests from a folder containing txt files -------------------------

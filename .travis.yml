@@ -19,7 +19,7 @@ before_script:
 - docker run -d --name cdbrail --rm tumgis/3dcitydb-postgis:railwayScene_LoD3
 - chmod u+x ./tests-export.sh ./tests-import.sh
 script:
-- ./tests-export.sh $version
+- ./tests-export.sh ${version}
 notifications:
   slack:
     secure: BlR8kxA17qu0/WEamZvoI+GCEz0A1yLm3YKK/nrZIYTbXxm/5pycfxbNW5VKmdiSeFlv+Ja2zXGV+YsTfBFmM0XdZAG5SPA91pF0HnXXbkTOJoeaApVUxtvEFd9jLTuJqONaHEy139A+/yHRIt3d5FhlDzJLizKB/q3lwa2GAC9z/2TXnhdC+ht8t0AMOLe0z8Xc5ugOMlFzibs6y9kz3/cpR7NUnXXkUZ10/Kczg/kn71V070iG7TlBCe/Slg/QZ3IE5/6n2k7DBS5qwDudqD3PujfQTlxn6Xs4W2b1HH6KsMk9dXkXjTIWE0EFFDRyZcFPAVyBG2WS0O1XXFgyGvvQBN4cZuaR93tIGgPFtXnzNFm66mgeSMJpRv+94oRfj5NCzoTJ61/ehLR8vUy0oBka5h9aLI8K4aMGM6aVZROYZrxMpgW42teBMmdEl0GlMqgr665rGjn+syYM0D6/Jp7BibhoxPUpd3/CpKjV/96qZuGzeT4OGi9JGys4O+QWhis962R9F5aIS1t2/sfd4c1j8OTf7y0jh7pVHU3au7OIX6y4zttYQ0azHMAKBcGTAbuWScIk/ydK6vPtzcZbT+5PdJK4bDK1GcOsxdVL6odhVNFoInWPfPWY/b6IK916YQuFgEuaKA5325LccaQuUrmHIMf2ZPw1az0i9eJbp4w=
