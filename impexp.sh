@@ -36,4 +36,4 @@ echo "$@"
 printf "\n\n"
 
 # ./bin/3DCityDB-Importer-Exporter -shell "$@"
-./bin/impexp "$@"
+impexp "$@"

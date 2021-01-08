@@ -53,7 +53,8 @@ WORKDIR /impexp
 
 RUN set -x && \
   mkdir -p /share/config /share/data && \
-  chmod -v u+x /impexp/bin/* /impexp/contribs/collada2gltf/COLLADA2GLTF*linux/COLLADA2GLTF-bin
+  chmod -v u+x /impexp/bin/* /impexp/contribs/collada2gltf/COLLADA2GLTF*linux/COLLADA2GLTF-bin && \
+  ln -vs /impexp/bin/impexp /usr/bin/impexp
 
 # Copy entrypoint script
 COPY impexp.sh /impexp/bin/
