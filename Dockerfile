@@ -25,7 +25,7 @@ RUN set -x && \
 
 # Build
 RUN set -x && \
-  chmod u+x ./gradlew && ./gradlew installDist
+  chmod u+x ./gradlew && ./gradlew installMinimizedDist
 
 # Move dist
 RUN set -x && \
@@ -42,9 +42,8 @@ RUN set -x && \
 # Cleanup
 RUN set -x && \
   apt-get purge -y --auto-remove $BUILD_PACKAGES && \
-  rm -rf /build_tmp /impexp/samples /impexp/3dcitydb /impexp/3d-web-map-client \
-    /impexp/contribs/collada2gltf/*osx* /impexp/contribs/collada2gltf/*windows* \
-    /impexp/license /impexp/templates /impexp/**/*.md /impexp/**/*.txt /impexp/**/*.bat \
+  rm -rf /build_tmp /impexp/contribs/collada2gltf/*osx* /impexp/contribs/collada2gltf/*windows* \
+    /impexp/license /impexp/**/*.md /impexp/**/*.txt /impexp/**/*.bat \
     /var/lib/apt/lists/*
 
 # Runtime stage ###############################################################

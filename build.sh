@@ -16,12 +16,12 @@
 # OpenJDK - master - no cache
 DOCKER_BUILDKIT=1 \
 docker build -t tumgis/3dcitydb-importer-exporter:latest \
-    --build-arg impexp_version=master \
+    --build-arg impexp_version=gradlew-installDist-minimized \
     --no-cache \
   .
 
 # OpenJDK - master
-# DOCKER_BUILDKIT=1 \
+#DOCKER_BUILDKIT=1 \
 # docker build -t tumgis/3dcitydb-importer-exporter:latest \
-#     --build-arg impexp_version=master \
+#     --build-arg impexp_version=gradlew-installDist-minimized \
 #   .
