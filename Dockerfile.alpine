@@ -29,7 +29,7 @@ RUN set -x && \
 # Move dist
 RUN set -x && \
   mkdir -p /impexp && \
-  mv impexp-client/build/install/3DCityDB-Importer-Exporter/* /impexp
+  mv impexp-client/build/install/3DCityDB-Importer-Exporter-Minimized/* /impexp
 
 # Create version info file
 COPY gitinfo.sh /build_tmp
