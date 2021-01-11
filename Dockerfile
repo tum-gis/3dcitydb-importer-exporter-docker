@@ -5,7 +5,7 @@
 
 # Fetch & build stage #########################################################
 # Base image
-ARG buildstage_tag='11-slim'
+ARG buildstage_tag='11.0.9-slim'
 FROM openjdk:${buildstage_tag} AS buildstage
 
 # Settings
@@ -47,7 +47,7 @@ RUN set -x && \
     /var/lib/apt/lists/*
 
 # Runtime stage ###############################################################
-ARG runtimestage_tag='11-jre-slim'
+ARG runtimestage_tag='11.0.9-jre-slim'
 FROM openjdk:11-jre-slim AS runtimestage
 COPY --from=buildstage /impexp /impexp
 COPY --from=buildstage /versioninfo.txt /versioninfo.txt
