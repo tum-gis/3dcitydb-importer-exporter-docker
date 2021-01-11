@@ -40,12 +40,14 @@ To get the image run: `docker pull tumgis/3dcitydb-importer-exporter:<TAG>` Foll
   - [More 3DCityDB Docker Images](#more-3dcitydb-docker-images)
   - [Usage](#usage)
   - [Importer/Exporter CLI documentation](#importerexporter-cli-documentation)
+    - [Commands and general CLI options](#commands-and-general-cli-options)
     - [Import](#import)
     - [Export](#export)
     - [Visualization export (kml, collada, glTF)](#visualization-export-kml-collada-gltf)
     - [Delete](#delete)
     - [Validate](#validate)
     - [GUI](#gui)
+    - [Generate spreadsheet](#generate-spreadsheet)
 
 ## Quick start
 
@@ -85,6 +87,8 @@ To be done!
 ## Importer/Exporter CLI documentation
 
 This section contains the output of the Importer/Exporter CLI `help` command.
+
+### Commands and general CLI options
 
 ```text
 Usage: impexp [-hV] [--ade-extensions=<folder>] [-c=<file>] [--log-file=<file>]
@@ -486,4 +490,57 @@ Starts the graphical user interface.
       --plugins=<folder>    Load plugins from this folder.
       --ade-extensions=<folder>
                             Load ADE extensions from this folder.
+```
+
+### Generate spreadsheet
+
+```text
+Usage: impexp spreadsheet-generate [-hV] [--ade-extensions=<folder>] [-b=<minx,
+                                   miny,maxx,maxy[,srid]>] [-c=<file>]
+                                   [-D=<char>] [--log-file=<file>]
+                                   [--log-level=<level>] -o=<outputFile>
+                                   [--pid-file=<file>] [--plugins=<folder>]
+                                   --template=<templateFile> [[-t=<[prefix:]
+                                   name>[,<[prefix:]name>...]]...
+                                   [--namespace=<prefix=name>[,
+                                   <prefix=name>...]]...] [[-T=<database>]
+                                   -H=<host> [-P=<port>] -d=<name>
+                                   [-S=<schema>] -u=<name> [-p[=<password>]]]
+                                   [@<filename>...]
+Generate spreadsheet from the database.
+      [@<filename>...]       One or more argument files containing options.
+      --template=<templateFile>
+                             Name of the template file.
+  -t, --type-name=<[prefix:]name>[,<[prefix:]name>...]
+                             Names of the top-level features to process.
+      --namespace=<prefix=name>[,<prefix=name>...]
+                             Prefix-to-namespace mappings.
+  -b, --bbox=<minx,miny,maxx,maxy[,srid]>
+                             Bounding box to use as spatial filter.
+  -o, --output=<outputFile>  Name of the output spreadsheet file with the
+                               extension .csv or .xlsx
+  -D, --delimiter=<char>     Delimiter to use for splitting lines in CSV file
+                               (default: ',').
+  -h, --help                 Show this help message and exit.
+  -V, --version              Print version information and exit.
+  -c, --config=<file>        Use configuration from this file.
+      --log-level=<level>    Log level: error, warn, info, debug (default:
+                               info).
+      --log-file=<file>      Write log messages to this file.
+      --pid-file=<file>      Create a file containing the current process ID.
+      --plugins=<folder>     Load plugins from this folder.
+      --ade-extensions=<folder>
+                             Load ADE extensions from this folder.
+Database connection options:
+  -T, --db-type=<database>   Database type: postgresql, oracle (default:
+                               postgresql).
+  -H, --db-host=<host>       Name of the host on which the 3DCityDB is running.
+  -P, --db-port=<port>       Port of the 3DCityDB server (default: 5432 | 1521).
+  -d, --db-name=<name>       Name of the 3DCityDB database to connect to.
+  -S, --db-schema=<schema>   Schema to use when connecting to the 3DCityDB
+                               (default: citydb | username).
+  -u, --db-username=<name>   Username to use when connecting to the 3DCityDB.
+  -p, --db-password[=<password>]
+                             Password to use when connecting to the 3DCityDB
+                               (leave empty to be prompted).
 ```
