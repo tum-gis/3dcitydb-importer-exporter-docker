@@ -12,10 +12,12 @@ env:
 # - version: v4.2.3
 - version: master
 before_install:
-- DOCKER_BUILDKIT=1 docker build --build-arg impexp_version=${version} -t tumgis/3dcitydb-importer-exporter:${version} .
-- DOCKER_BUILDKIT=1 docker build -f Dockerfile.alpine --build-arg impexp_version=${version} -t tumgis/3dcitydb-importer-exporter:alpine-${version} .
+- docker build --build-arg impexp_version=${version} -t tumgis/3dcitydb-importer-exporter:${version} .
+- docker build -f Dockerfile.alpine --build-arg impexp_version=${version} -t tumgis/3dcitydb-importer-exporter:alpine-${version} .
 before_script:
 - docker --version
+- docker run -it --entrypoint '' tumgis/3dcitydb-importer-exporter:${version} java --version
+- docker run -it --entrypoint '' tumgis/3dcitydb-importer-exporter:${version}-alpine java --version
 #- docker run -d --name cdbrail --rm tumgis/3dcitydb-postgis:railwayScene_LoD3
 #- chmod u+x ./tests-export.sh ./tests-import.sh
 # script:
