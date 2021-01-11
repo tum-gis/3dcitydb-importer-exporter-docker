@@ -13,9 +13,10 @@ This repo contains a Dockerfile for the [3D City Database (3DCityDB) Importer/Ex
 
 ## News
 
+* 2021-01 Implemented minimized Docker dist of Importer/Exporter
 * 2020-12 Added Alpine image
-* 2020-12 Reduced image size using mlti stage builds
-* Support for powerful new 3DCityDB Importer/Exporter CLI added
+* 2020-12 Reduced image size using multi stage builds
+* 2020-11 Support for powerful new 3DCityDB Importer/Exporter CLI added
 
 ## Image variants
 
@@ -86,174 +87,188 @@ To be done!
 This section contains the output of the Importer/Exporter CLI `help` command.
 
 ```text
-  Usage: impexp [-hV] [-c=<file>] [--log-file=<file>] [--log-level=<level>]
-                [--pid-file=<file>] [@<filename>...] COMMAND
-  Command-line interface for the 3D City Database.
-        [@<filename>...]      One or more argument files containing options.
-    -c, --config=<file>       Use configuration from this file.
-        --log-level=<level>   Log level: error, warn, info, debug (default: info).
-        --log-file=<file>     Write log messages to this file.
-        --pid-file=<file>     Create a file containing the current process ID.
-    -h, --help                Show this help message and exit.
-    -V, --version             Print version information and exit.
-  Commands:
-    help        Displays help information about the specified command
-    import      Imports data in CityGML or CityJSON format.
-    export      Exports data in CityGML format.
-    export-vis  Exports data in KML/COLLADA/glTF format for visualization.
-    delete      Deletes top-level city objects from the database.
-    validate    Validates input files against their schemas.
-    gui         Starts the graphical user interface.
+Usage: impexp [-hV] [--ade-extensions=<folder>] [-c=<file>] [--log-file=<file>]
+              [--log-level=<level>] [--pid-file=<file>] [--plugins=<folder>]
+              [@<filename>...] COMMAND
+Command-line interface for the 3D City Database.
+      [@<filename>...]      One or more argument files containing options.
+  -c, --config=<file>       Use configuration from this file.
+      --log-level=<level>   Log level: error, warn, info, debug (default: info).
+      --log-file=<file>     Write log messages to this file.
+      --pid-file=<file>     Create a file containing the current process ID.
+      --plugins=<folder>    Load plugins from this folder.
+      --ade-extensions=<folder>
+                            Load ADE extensions from this folder.
+  -h, --help                Show this help message and exit.
+  -V, --version             Print version information and exit.
+Commands:
+  help                  Displays help information about the specified command
+  import                Imports data in CityGML or CityJSON format.
+  export                Exports data in CityGML format.
+  export-vis            Exports data in KML/COLLADA/glTF format for
+                          visualization.
+  delete                Deletes top-level city objects from the database.
+  validate              Validates input files against their schemas.
+  gui                   Starts the graphical user interface.
+  spreadsheet-generate  Generate spreadsheet from the database.
 ```
 
 ### Import
 
 ```text
-Usage: impexp import [-hV] [-c=<file>] [--import-log=<file>]
-                      [--log-file=<file>] [--log-level=<level>]
-                      [--pid-file=<file>] [--worker-threads=<threads[,max]>]
-                      [[[-t=<[prefix:]name>[,<[prefix:]name>...]]...
-                      [--namespace=<prefix=name>[,<prefix=name>...]]...] [-i=<id>
-                      [,<id>...] [-i=<id>[,<id>...]]...] [-b=<minx,miny,maxx,maxy
-                      [,srid]> [--bbox-mode=<mode>]] [[--count=<count>]
-                      [--start-index=<index>]] [[--no-appearance]]]
-                      [[-T=<database>] -H=<host> [-P=<port>] -d=<name>
-                      [-S=<schema>] -u=<name> [-p[=<password>]]]
-                      [@<filename>...] <file>...
-  Imports data in CityGML or CityJSON format.
-        [@<filename>...]       One or more argument files containing options.
-        <file>...              Files or directories to import (glob patterns
-                                allowed).
-        --import-log=<file>    Record imported top-level features to this file.
-        --worker-threads=<threads[,max]>
-                              Number of worker threads to use.
-    -h, --help                 Show this help message and exit.
-    -V, --version              Print version information and exit.
-    -c, --config=<file>        Use configuration from this file.
-        --log-level=<level>    Log level: error, warn, info, debug (default:
-                                info).
-        --log-file=<file>      Write log messages to this file.
-        --pid-file=<file>      Create a file containing the current process ID.
-  Import filter options:
-    -t, --type-name=<[prefix:]name>[,<[prefix:]name>...]
-                              Names of the top-level features to process.
-        --namespace=<prefix=name>[,<prefix=name>...]
-                              Prefix-to-namespace mappings.
-    -i, --gml-id=<id>[,<id>...]
-                              Process top-level features with a matching gml:id.
-    -b, --bbox=<minx,miny,maxx,maxy[,srid]>
-                              Bounding box to use as spatial filter.
-        --bbox-mode=<mode>     Bounding box filter mode: overlaps, within
-                                (default: overlaps).
-        --count=<count>        Maximum number of top-level features to import.
-        --start-index=<index>  Index within the input set to import from.
-        --no-appearance        Do not import appearance information.
-  Database connection options:
-    -T, --db-type=<database>   Database type: postgresql, oracle (default:
-                                postgresql).
-    -H, --db-host=<host>       Name of the host on which the 3DCityDB is running.
-    -P, --db-port=<port>       Port of the 3DCityDB server (default: 5432 | 1521).
-    -d, --db-name=<name>       Name of the 3DCityDB database to connect to.
-    -S, --db-schema=<schema>   Schema to use when connecting to the 3DCityDB
-                                (default: citydb | username).
-    -u, --db-username=<name>   Username to use when connecting to the 3DCityDB.
-    -p, --db-password[=<password>]
-                              Password to use when connecting to the 3DCityDB
-                                (leave empty to be prompted).
+Usage: impexp import [-hV] [--ade-extensions=<folder>] [-c=<file>]
+                     [--import-log=<file>] [--log-file=<file>]
+                     [--log-level=<level>] [--pid-file=<file>]
+                     [--plugins=<folder>] [--worker-threads=<threads[,max]>]
+                     [[[-t=<[prefix:]name>[,<[prefix:]name>...]]...
+                     [--namespace=<prefix=name>[,<prefix=name>...]]...] [-i=<id>
+                     [,<id>...] [-i=<id>[,<id>...]]...] [-b=<minx,miny,maxx,maxy
+                     [,srid]> [--bbox-mode=<mode>]] [[--count=<count>]
+                     [--start-index=<index>]] [[--no-appearance]]]
+                     [[-T=<database>] -H=<host> [-P=<port>] -d=<name>
+                     [-S=<schema>] -u=<name> [-p[=<password>]]]
+                     [@<filename>...] <file>...
+Imports data in CityGML or CityJSON format.
+      [@<filename>...]       One or more argument files containing options.
+      <file>...              Files or directories to import (glob patterns
+                               allowed).
+      --import-log=<file>    Record imported top-level features to this file.
+      --worker-threads=<threads[,max]>
+                             Number of worker threads to use.
+  -h, --help                 Show this help message and exit.
+  -V, --version              Print version information and exit.
+  -c, --config=<file>        Use configuration from this file.
+      --log-level=<level>    Log level: error, warn, info, debug (default:
+                               info).
+      --log-file=<file>      Write log messages to this file.
+      --pid-file=<file>      Create a file containing the current process ID.
+      --plugins=<folder>     Load plugins from this folder.
+      --ade-extensions=<folder>
+                             Load ADE extensions from this folder.
+Import filter options:
+  -t, --type-name=<[prefix:]name>[,<[prefix:]name>...]
+                             Names of the top-level features to process.
+      --namespace=<prefix=name>[,<prefix=name>...]
+                             Prefix-to-namespace mappings.
+  -i, --gml-id=<id>[,<id>...]
+                             Process top-level features with a matching gml:id.
+  -b, --bbox=<minx,miny,maxx,maxy[,srid]>
+                             Bounding box to use as spatial filter.
+      --bbox-mode=<mode>     Bounding box filter mode: overlaps, within
+                               (default: overlaps).
+      --count=<count>        Maximum number of top-level features to import.
+      --start-index=<index>  Index within the input set to import from.
+      --no-appearance        Do not import appearance information.
+Database connection options:
+  -T, --db-type=<database>   Database type: postgresql, oracle (default:
+                               postgresql).
+  -H, --db-host=<host>       Name of the host on which the 3DCityDB is running.
+  -P, --db-port=<port>       Port of the 3DCityDB server (default: 5432 | 1521).
+  -d, --db-name=<name>       Name of the 3DCityDB database to connect to.
+  -S, --db-schema=<schema>   Schema to use when connecting to the 3DCityDB
+                               (default: citydb | username).
+  -u, --db-username=<name>   Username to use when connecting to the 3DCityDB.
+  -p, --db-password[=<password>]
+                             Password to use when connecting to the 3DCityDB
+                               (leave empty to be prompted).
 ```
 
 ### Export
 
 ```text
-Usage: impexp export [-hV] [-c=<file>] [--log-file=<file>]
-                    [--log-level=<level>] -o=<file>
-                    [--output-encoding=<encoding>] [--pid-file=<file>]
-                    [--worker-threads=<threads[,max]>] [[[-t=<[prefix:]name>[,<
-                    [prefix:]name>...]]... [--namespace=<prefix=name>[,
-                    <prefix=name>...]]...] [-i=<id>[,<id>...] [-i=<id>[,
-                    <id>...]]...] [--db-id=<id>[,<id>...] [--db-id=<id>[,
-                    <id>...]]...] [-b=<minx,miny,maxx,maxy[,srid]>
-                    [--bbox-mode=<mode>] [--bbox-tiling=<rows,columns>]]
-                    [[--count=<count>] [--start-index=<index>]] [-l=<0..4>[,
-                    <0..4>...] [-l=<0..4>[,<0..4>...]]... [--lod-mode=<mode>]
-                    [--lod-search-depth=<0..n|all>]] [[--no-appearance] |
-                    -a=<theme>[,<theme>...] [-a=<theme>[,<theme>...]]...]
-                    [-s=<select>] [-q=<xml>]] [[-T=<database>] -H=<host>
-                    [-P=<port>] -d=<name> [-S=<schema>] -u=<name> [-p
-                    [=<password>]]] [@<filename>...]
+Usage: impexp export [-hV] [--ade-extensions=<folder>] [-c=<file>]
+                     [--log-file=<file>] [--log-level=<level>] -o=<file>
+                     [--output-encoding=<encoding>] [--pid-file=<file>]
+                     [--plugins=<folder>] [--worker-threads=<threads[,max]>]
+                     [[[-t=<[prefix:]name>[,<[prefix:]name>...]]...
+                     [--namespace=<prefix=name>[,<prefix=name>...]]...] [-i=<id>
+                     [,<id>...] [-i=<id>[,<id>...]]...] [--db-id=<id>[,<id>...]
+                     [--db-id=<id>[,<id>...]]...] [-b=<minx,miny,maxx,maxy[,
+                     srid]> [--bbox-mode=<mode>] [-g=<rows,columns>]]
+                     [[--count=<count>] [--start-index=<index>]] [-l=<0..4>[,
+                     <0..4>...] [-l=<0..4>[,<0..4>...]]... [--lod-mode=<mode>]
+                     [--lod-search-depth=<0..n|all>]] [[--no-appearance] |
+                     -a=<theme>[,<theme>...] [-a=<theme>[,<theme>...]]...]
+                     [-s=<select>] [-q=<xml>]] [[-T=<database>] -H=<host>
+                     [-P=<port>] -d=<name> [-S=<schema>] -u=<name> [-p
+                     [=<password>]]] [@<filename>...]
 Exports data in CityGML format.
       [@<filename>...]       One or more argument files containing options.
   -o, --output=<file>        Name of the output file.
       --output-encoding=<encoding>
-                            Encoding used for the output file (default: UTF-8).
+                             Encoding used for the output file (default: UTF-8).
       --worker-threads=<threads[,max]>
-                            Number of worker threads to use.
+                             Number of worker threads to use.
   -h, --help                 Show this help message and exit.
   -V, --version              Print version information and exit.
   -c, --config=<file>        Use configuration from this file.
       --log-level=<level>    Log level: error, warn, info, debug (default:
-                              info).
+                               info).
       --log-file=<file>      Write log messages to this file.
       --pid-file=<file>      Create a file containing the current process ID.
+      --plugins=<folder>     Load plugins from this folder.
+      --ade-extensions=<folder>
+                             Load ADE extensions from this folder.
 Query and filter options:
   -t, --type-name=<[prefix:]name>[,<[prefix:]name>...]
-                            Names of the top-level features to process.
+                             Names of the top-level features to process.
       --namespace=<prefix=name>[,<prefix=name>...]
-                            Prefix-to-namespace mappings.
+                             Prefix-to-namespace mappings.
   -i, --gml-id=<id>[,<id>...]
-                            Process top-level features with a matching gml:id.
+                             Process top-level features with a matching gml:id.
       --db-id=<id>[,<id>...] Process top-level features with a matching
-                              database id.
+                               database id.
   -b, --bbox=<minx,miny,maxx,maxy[,srid]>
-                            Bounding box to use as spatial filter.
+                             Bounding box to use as spatial filter.
       --bbox-mode=<mode>     Bounding box filter mode: overlaps, within
-                              (default: overlaps).
-      --bbox-tiling=<rows,columns>
-                            Tile the bounding box into a rows x columns grid.
+                               (default: overlaps).
+  -g, --bbox-tiling=<rows,columns>
+                             Tile the bounding box into a rows x columns grid.
       --count=<count>        Maximum number of top-level features to process.
       --start-index=<index>  Index within the result set to process top-level
-                              features from.
+                               features from.
   -l, --lod=<0..4>[,<0..4>...]
-                            LoD representations to export.
+                             LoD representations to export.
       --lod-mode=<mode>      LoD filter mode: or, and, minimum, maximum
-                              (default: or).
+                               (default: or).
       --lod-search-depth=<0..n|all>
-                            Levels of sub-features to search for matching LoDs
-                              (default: 1).
+                             Levels of sub-features to search for matching LoDs
+                               (default: 1).
       --no-appearance        Do not export appearance information.
   -a, --appearance-theme=<theme>[,<theme>...]
-                            Only export appearances with a matching theme. Use
-                              'none' for the null theme.
+                             Only export appearances with a matching theme. Use
+                               'none' for the null theme.
   -s, --sql-select=<select>  SQL select statement to use as filter.
   -q, --xml-query=<xml>      XML query expression to use as database query.
 Database connection options:
   -T, --db-type=<database>   Database type: postgresql, oracle (default:
-                              postgresql).
+                               postgresql).
   -H, --db-host=<host>       Name of the host on which the 3DCityDB is running.
   -P, --db-port=<port>       Port of the 3DCityDB server (default: 5432 | 1521).
   -d, --db-name=<name>       Name of the 3DCityDB database to connect to.
   -S, --db-schema=<schema>   Schema to use when connecting to the 3DCityDB
-                              (default: citydb | username).
+                               (default: citydb | username).
   -u, --db-username=<name>   Username to use when connecting to the 3DCityDB.
   -p, --db-password[=<password>]
-                            Password to use when connecting to the 3DCityDB
-                              (leave empty to be prompted).
+                             Password to use when connecting to the 3DCityDB
+                               (leave empty to be prompted).
 ```
 
 ### Visualization export (kml, collada, glTF)
 
 ```text
-Usage: impexp export-vis [-hjVz] [-c=<file>] [--log-file=<file>]
-                         [--log-level=<level>] -o=<file> [--pid-file=<file>]
+Usage: impexp export-vis [-hjVz] [--ade-extensions=<folder>] [-c=<file>]
+                         [--log-file=<file>] [--log-level=<level>] -o=<file>
+                         [--pid-file=<file>] [--plugins=<folder>]
                          [--worker-threads=<threads[,max]>] [-D=<mode[=pixels]>
                          [,<mode[=pixels]>...] [-D=<mode[=pixels]>[,<mode
                          [=pixels]>...]]... -l=<0..4 | halod> [-a=<theme>]]
                          [[[-t=<[prefix:]name>[,<[prefix:]name>...]]...
                          [--namespace=<prefix=name>[,<prefix=name>...]]...]
                          [-i=<id>[,<id>...] [-i=<id>[,<id>...]]...] [-b=<minx,
-                         miny,maxx,maxy[,srid]> [-g=<rows,columns | auto
-                         [=length]>]]] [[-s] [--no-surface-normals] [-C]
-                         [-f=<0..1>] [-x=<mode>] [--no-pot-atlases]] [-G
+                         miny,maxx,maxy[,srid]>] [-g=<rows,columns | auto
+                         [=length]>]] [[-s] [--no-surface-normals] [-C] [-f=<0..
+                         1>] [-x=<mode>] [--no-pot-atlases]] [-G
                          [--gltf-version=<version>] [--gltf-converter=<file>]
                          [--gltf-embed-textures] [--gltf-binary]
                          [--gltf-draco-compression] [-r]] [[-A=<mode>]
@@ -276,6 +291,9 @@ Exports data in KML/COLLADA/glTF format for visualization.
                                info).
       --log-file=<file>      Write log messages to this file.
       --pid-file=<file>      Create a file containing the current process ID.
+      --plugins=<folder>     Load plugins from this folder.
+      --ade-extensions=<folder>
+                             Load ADE extensions from this folder.
 Display options:
   -D, --display-mode=<mode[=pixels]>[,<mode[=pixels]>...]
                              Display mode: collada, geometry, extruded,
@@ -294,7 +312,7 @@ Query and filter options:
                              Process top-level features with a matching gml:id.
   -b, --bbox=<minx,miny,maxx,maxy[,srid]>
                              Bounding box to use as spatial filter.
-  -g, --bbox-tiling=<rows,columns | auto[=length]>
+  -g, --tiling=<rows,columns | auto[=length]>
                              Tile the bounding box into a rows x columns grid
                                or use 'auto' to create tiles with a fixed side
                                length. Optionally specify the side length in
@@ -351,82 +369,90 @@ Database connection options:
 ### Delete
 
 ```text
-Usage: impexp delete [-hV] [-c=<file>] [--log-file=<file>]
-                    [--log-level=<level>] [-m=<mode>] [--pid-file=<file>]
-                    [[[-t=<[prefix:]name>[,<[prefix:]name>...]]...
-                    [--namespace=<prefix=name>[,<prefix=name>...]]...] [-i=<id>
-                    [,<id>...] [-i=<id>[,<id>...]]...] [--db-id=<id>[,<id>...]
-                    [--db-id=<id>[,<id>...]]...] [-b=<minx,miny,maxx,maxy[,
-                    srid]> [--bbox-mode=<mode>]] [[--count=<count>]
-                    [--start-index=<index>]] [-s=<select>] [-q=<xml>]]
-                    [-f=<file> [--delete-list-encoding=<encoding>] [-n=<name>]
-                    [-I=<index>] [-C=<type>] [-D=<char>] [--[no-]header]
-                    [--quote=<char>] [--comment-start=<marker>]]
-                    [[-T=<database>] -H=<host> [-P=<port>] -d=<name>
-                    [-S=<schema>] -u=<name> [-p[=<password>]]] [@<filename>...]
+Usage: impexp delete [-hvV] [--ade-extensions=<folder>] [-c=<file>]
+                     [--log-file=<file>] [--log-level=<level>] [-m=<mode>]
+                     [--pid-file=<file>] [--plugins=<folder>] [[[-t=<[prefix:]
+                     name>[,<[prefix:]name>...]]... [--namespace=<prefix=name>[,
+                     <prefix=name>...]]...] [-i=<id>[,<id>...] [-i=<id>[,
+                     <id>...]]...] [--db-id=<id>[,<id>...] [--db-id=<id>[,
+                     <id>...]]...] [-b=<minx,miny,maxx,maxy[,srid]>
+                     [--bbox-mode=<mode>]] [[--count=<count>]
+                     [--start-index=<index>]] [-s=<select>] [-q=<xml>]]
+                     [-f=<file> [--delete-list-encoding=<encoding>] [-n=<name>]
+                     [-I=<index>] [-C=<type>] [-D=<char>] [--[no-]header]
+                     [--quote=<char>] [--comment-start=<marker>]]
+                     [[-T=<database>] -H=<host> [-P=<port>] -d=<name>
+                     [-S=<schema>] -u=<name> [-p[=<password>]]] [@<filename>...]
 Deletes top-level city objects from the database.
       [@<filename>...]       One or more argument files containing options.
   -m, --delete-mode=<mode>   Delete mode: delete, terminate (default: delete).
+  -v, --preview              Only check which top-level features would be
+                               affected, but that the features will not be
+                               deleted or terminated.
   -h, --help                 Show this help message and exit.
   -V, --version              Print version information and exit.
   -c, --config=<file>        Use configuration from this file.
       --log-level=<level>    Log level: error, warn, info, debug (default:
-                              info).
+                               info).
       --log-file=<file>      Write log messages to this file.
       --pid-file=<file>      Create a file containing the current process ID.
+      --plugins=<folder>     Load plugins from this folder.
+      --ade-extensions=<folder>
+                             Load ADE extensions from this folder.
 Query and filter options:
   -t, --type-name=<[prefix:]name>[,<[prefix:]name>...]
-                            Names of the top-level features to process.
+                             Names of the top-level features to process.
       --namespace=<prefix=name>[,<prefix=name>...]
-                            Prefix-to-namespace mappings.
+                             Prefix-to-namespace mappings.
   -i, --gml-id=<id>[,<id>...]
-                            Process top-level features with a matching gml:id.
+                             Process top-level features with a matching gml:id.
       --db-id=<id>[,<id>...] Process top-level features with a matching
-                              database id.
+                               database id.
   -b, --bbox=<minx,miny,maxx,maxy[,srid]>
-                            Bounding box to use as spatial filter.
+                             Bounding box to use as spatial filter.
       --bbox-mode=<mode>     Bounding box filter mode: overlaps, within
-                              (default: overlaps).
+                               (default: overlaps).
       --count=<count>        Maximum number of top-level features to process.
       --start-index=<index>  Index within the result set to process top-level
-                              features from.
+                               features from.
   -s, --sql-select=<select>  SQL select statement to use as filter.
   -q, --xml-query=<xml>      XML query expression to use as database query.
 Delete list options:
   -f, --delete-list=<file>   Name of the CSV file containing the delete list.
       --delete-list-encoding=<encoding>
-                            Encoding used for the CSV file (default: UTF-8).
+                             Encoding used for the CSV file (default: UTF-8).
   -n, --id-column-name=<name>
-                            Name of the id column.
+                             Name of the id column.
   -I, --id-column-index=<index>
-                            Index of the id column (default: 1).
+                             Index of the id column (default: 1).
   -C, --id-column-type=<type>
-                            Type of id column value: gml, db (default: gml).
+                             Type of id column value: gml, db (default: gml).
   -D, --delimiter=<char>     Delimiter to use for splitting lines (default: ,).
       --[no-]header          CSV file uses a header row (default: true).
       --quote=<char>         Character used as quote (default: ").
       --comment-start=<marker>
-                            Marker used to start a line comment (default: #).
+                             Marker used to start a line comment (default: #).
 Database connection options:
   -T, --db-type=<database>   Database type: postgresql, oracle (default:
-                              postgresql).
+                               postgresql).
   -H, --db-host=<host>       Name of the host on which the 3DCityDB is running.
   -P, --db-port=<port>       Port of the 3DCityDB server (default: 5432 | 1521).
   -d, --db-name=<name>       Name of the 3DCityDB database to connect to.
   -S, --db-schema=<schema>   Schema to use when connecting to the 3DCityDB
-                              (default: citydb | username).
+                               (default: citydb | username).
   -u, --db-username=<name>   Username to use when connecting to the 3DCityDB.
   -p, --db-password[=<password>]
-                            Password to use when connecting to the 3DCityDB
-                              (leave empty to be prompted).
+                             Password to use when connecting to the 3DCityDB
+                               (leave empty to be prompted).
 ```
 
 ### Validate
 
 ```text
-Usage: impexp validate [-hV] [-c=<file>] [--log-file=<file>]
-                      [--log-level=<level>] [--pid-file=<file>]
-                      [@<filename>...] <file>...
+Usage: impexp validate [-hV] [--ade-extensions=<folder>] [-c=<file>]
+                       [--log-file=<file>] [--log-level=<level>]
+                       [--pid-file=<file>] [--plugins=<folder>]
+                       [@<filename>...] <file>...
 Validates input files against their schemas.
       [@<filename>...]      One or more argument files containing options.
       <file>...             Files or directories to validate (glob patterns
@@ -437,13 +463,17 @@ Validates input files against their schemas.
       --log-level=<level>   Log level: error, warn, info, debug (default: info).
       --log-file=<file>     Write log messages to this file.
       --pid-file=<file>     Create a file containing the current process ID.
+      --plugins=<folder>    Load plugins from this folder.
+      --ade-extensions=<folder>
+                            Load ADE extensions from this folder.
 ```
 
 ### GUI
 
 ```text
-Usage: impexp gui [-hV] [--no-splash] [-c=<file>] [--log-file=<file>]
-                  [--log-level=<level>] [--pid-file=<file>] [@<filename>...]
+Usage: impexp gui [-hV] [--no-splash] [--ade-extensions=<folder>] [-c=<file>]
+                  [--log-file=<file>] [--log-level=<level>] [--pid-file=<file>]
+                  [--plugins=<folder>] [@<filename>...]
 Starts the graphical user interface.
       [@<filename>...]      One or more argument files containing options.
       --no-splash           Hide the splash screen during startup.
@@ -453,4 +483,7 @@ Starts the graphical user interface.
       --log-level=<level>   Log level: error, warn, info, debug (default: info).
       --log-file=<file>     Write log messages to this file.
       --pid-file=<file>     Create a file containing the current process ID.
+      --plugins=<folder>    Load plugins from this folder.
+      --ade-extensions=<folder>
+                            Load ADE extensions from this folder.
 ```
