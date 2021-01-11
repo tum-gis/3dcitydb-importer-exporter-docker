@@ -13,7 +13,7 @@ function testImport() {
   xargs -L1 -I{} basename -s .txt "{}" | xargs -I{} \
     docker run --name impexp -t \
     --rm \
-    -v /d/repo/git/docker/3dcitydb-impexp/git/share/:/share \
+    -v /d/repos/docker/3dcitydb-impexp/share/:/share \
     --link cdbimp \
    "$3:$4" \
    "@/$1/{}.txt" "$2"
