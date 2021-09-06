@@ -1,5 +1,21 @@
 # 3DCityDB Importer/Exporter Docker
 
+**!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!**
+
+**Deprecation notice:** This repository has been deprecated on 6th of September 2021.
+The Docker images and this documentation will no longer be updated, because the content
+has moved to the [official 3DCityDB repository](https://github.com/3dcitydb). The old
+images will remain available on DockerHub, however, we recommend to migrate to the new
+version.
+
+Please find the **new Docker images** and **updated documentation** here:
+
+* Source code, Dockerfiles: https://github.com/3dcitydb/importer-exporter
+* Documentation: https://3dcitydb-docs.readthedocs.io/en/latest/impexp/docker.html
+* Docker image repository: https://hub.docker.com/repository/docker/3dcitydb/impexp
+
+**!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!**
+
 **Warning: This is a pre-release. The image has not jet been tested and this documentation is incomplete and possibly wrong!**
 
 A test image is available here: [tumgis/3dcitydb-importer-exporter](tumgis/3dcitydb-importer-exporter) on DockerCloud.
